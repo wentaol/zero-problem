@@ -38,7 +38,7 @@ LeelaZero::LeelaZero(const String& lz, const String& networkWeights, int nThread
 	String command = ToString("\"") + lz
 		+ ToString("\" -g -w \"") + networkWeights
 		+ ToString("\" -r 0 -t ") + t
-		+ ToString(" --noponder --timemanage off --precision half");
+		+ ToString(" --noponder");
 
 	Log("<Command>");
 	Log(ToUtf8String(command));
@@ -111,7 +111,6 @@ std::string LeelaZero::getLine(const std::string& s)
 		if (s.empty() || line.substr(0U, s.length()) == s) {
 			return line;
 		}
-		Sleep(5);
 	}
 	return std::string();
 }
@@ -127,7 +126,6 @@ std::string LeelaZero::getResult()
 		Trim(line, '\r');
 		Log(line);
 		result << line << '\n';
-		Sleep(5);
 	}
 	Log("");
 
