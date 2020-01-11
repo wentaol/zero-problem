@@ -27,8 +27,12 @@ std::string Illustration::json(const std::string& id)
 	const auto& lastMove = board.lastMove;
 	const std::string lastMoveCoord = lastMove.coord.isPass() ? "--" : lastMove.coord.sgfStr();
 	const char nextMoveColor = lastMove.color == Color::BLACK ? 'W' : 'B';
+	
+	std::string tmp = metadata;
+	std::replace(tmp.begin(), tmp.end(), '\\', '/');
 
 	o << "\t\t{\n";
+	o << "\t\t\tmetadata: '" << tmp << "',\n";
 	o << "\t\t\tid: '" << id << "',\n";
 	o << "\t\t\tsz: " << boardSize << ",\n";
 	o << "\t\t\tps: " << (position + 1) << ",\n";

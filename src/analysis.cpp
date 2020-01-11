@@ -168,7 +168,7 @@ std::vector<double> Analysis::measurePriorities(Player player)
 }
 
 std::vector<std::string> Analysis::makeJson(
-	const std::string& id, int& number,
+	const std::string& metadata, const std::string& id, int& number,
 	int maximumNumberOfMoves, const std::vector<int>& problemPositions)
 {
 	std::vector<std::string> json;
@@ -220,6 +220,7 @@ std::vector<std::string> Analysis::makeJson(
 		}
 
 		Illustration il;
+		il.metadata = metadata;
 		gtp->send("showboard");
 		gtp->getResult();
 		il.board.create(*gtp);
@@ -419,7 +420,10 @@ std::vector<std::string> Analysis::generateProblems(
 
 	// 問題を作成していない局面に対応するvllの要素が存在する保証がないので
 	// 間違えてkeyPositionsを渡すとバグが発生するので注意する
-	return makeJson(id, number, setting.maximumNumberOfMoves, problemPositions);
+	std::wstring ws(job.name.c_str());
+	std::string metadata = std::string(ws.begin(), ws.end());
+	return makeJson(metadata, id, number, 
+					setting.maximumNumberOfMoves, problemPositions);
 }
 
 std::string Analysis::generateHtml(

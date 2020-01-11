@@ -37,7 +37,7 @@ void Setting::setDefaultValues()
 
 int Setting::getNumberOfVisitsInTheFirstStep() const
 {
-	return std::max(numberOfVisits / 30, 1);
+	return std::max(numberOfVisits / 10, 1);
 }
 
 int Setting::getVirtualNumberOfVisits1() const

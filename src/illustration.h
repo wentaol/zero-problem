@@ -4,6 +4,7 @@
 
 struct Illustration
 {
+	std::string metadata;
 	Board board;
 	int position;
 	Board referenceBoards[2];
