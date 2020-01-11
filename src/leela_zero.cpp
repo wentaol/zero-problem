@@ -9,7 +9,9 @@
 #include <boost/process/windows.hpp>
 #endif
 
-static const boost::regex reFirstLine(R"(Using \d++ thread\(s\)\..*+)");
+static const boost::regex reFirstLine_16(R"(Using \d++ thread\(s\)\..*+)");
+static const boost::regex reFirstLine_17(R"(Using OpenCL.*)");
+
 LeelaZero::LeelaZero(const String& lz, const String& networkWeights, int nThreads, std::atomic<bool>& ss)
 	: shouldStop(ss)
 {
@@ -36,7 +38,7 @@ LeelaZero::LeelaZero(const String& lz, const String& networkWeights, int nThread
 	String command = ToString("\"") + lz
 		+ ToString("\" -g -w \"") + networkWeights
 		+ ToString("\" -r 0 -t ") + t
-		+ ToString(" --noponder");
+		+ ToString(" --noponder --timemanage off --precision half");
 
 	Log("<Command>");
 	Log(ToUtf8String(command));
@@ -63,9 +65,14 @@ LeelaZero::LeelaZero(const String& lz, const String& networkWeights, int nThread
 	// 標準エラー出力の最初の一行を読んでLeela Zeroか判定する
 	Log("<Information>");
 	const auto firstLine = getLine();
-	if (!boost::regex_match(firstLine, reFirstLine)) {
+	const auto v16_match = boost::regex_match(firstLine, reFirstLine_16);
+	const auto v17_match = boost::regex_match(firstLine, reFirstLine_17);
+	if (v16_match)
+		version = "0.16";
+	else if (v17_match)
+		version = "0.17";
+	else
 		throw ExitStatus::FAILED;
-	}
 
 	// ログが読みにくくなるので起動時の出力はすべて読んでおく
 	getLine("Setting");
@@ -75,6 +82,11 @@ LeelaZero::LeelaZero(const String& lz, const String& networkWeights, int nThread
 LeelaZero::~LeelaZero()
 {
 	delete child;
+}
+
+std::string LeelaZero::getVersion()
+{
+	return version;
 }
 
 std::string LeelaZero::getLine()
@@ -99,6 +111,7 @@ std::string LeelaZero::getLine(const std::string& s)
 		if (s.empty() || line.substr(0U, s.length()) == s) {
 			return line;
 		}
+		Sleep(5);
 	}
 	return std::string();
 }
@@ -114,6 +127,7 @@ std::string LeelaZero::getResult()
 		Trim(line, '\r');
 		Log(line);
 		result << line << '\n';
+		Sleep(5);
 	}
 	Log("");
 

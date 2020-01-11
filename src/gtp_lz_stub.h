@@ -9,6 +9,7 @@ class GtpLzStub : public GtpLz
 public:
 
 	GtpLzStub(const std::string& e = std::string());
+	std::string getVersion() override;
 	std::string getLine() override;
 	std::string getLine(const std::string& s) override;
 	std::string getResult() override;

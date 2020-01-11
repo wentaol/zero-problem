@@ -16,13 +16,14 @@ public:
 	LeelaZero(const String& lz, const String& networkWeights, int nThreads, std::atomic<bool>& ss);
 	~LeelaZero();
 
+	std::string getVersion() override;
 	std::string getLine() override;
 	std::string getLine(const std::string& s) override;
 	std::string getResult() override;
 	void send(const std::string& gtpCommand) override;
 
 private:
-
+	std::string version;
 	boost::process::opstream ops;
 	boost::process::ipstream ips;
 	boost::process::ipstream eps;

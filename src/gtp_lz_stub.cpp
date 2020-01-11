@@ -6,6 +6,11 @@ GtpLzStub::GtpLzStub(const std::string& e)
 {
 }
 
+std::string GtpLzStub::getVersion()
+{
+	return "";
+}
+
 std::string GtpLzStub::getLine()
 {
 	std::string line;

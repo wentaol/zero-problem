@@ -5,6 +5,7 @@
 struct GtpLz
 {
 	void skipNextBlankLine();
+	virtual std::string getVersion() = 0;
 	virtual std::string getLine() = 0;
 	virtual std::string getLine(const std::string& s) = 0;
 	virtual std::string getResult() = 0;
