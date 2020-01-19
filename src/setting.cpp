@@ -65,6 +65,7 @@ static const char* const KEY_CHARACTER_SET = "CharacterSet";
 static const char* const KEY_SEARCH_SPEED = "SearchSpeed";
 static const char* const KEY_LOGGING = "Logging";
 static const char* const KEY_BOARD_SIZE = "BoardSize";
+static const char* const KEY_IS_LATEX = "IsLatex";
 
 static const char* const VALUE_BLACK = "black";
 static const char* const VALUE_WHITE = "white";
@@ -148,7 +149,10 @@ bool Setting::load()
 
 					// 現在は19路盤しか対応しないのでvalueは無視する
 					boardSize = 19;
+				} else if (key == KEY_IS_LATEX) {
+					IsLatexOutput = (value == "1");
 				}
+
 			}
 		}
 	} catch(...) {
@@ -224,6 +228,6 @@ bool Setting::save() const
 
 	// 現在は19路盤しか対応しないのでboardSizeは無視する
 	ofs << KEY_BOARD_SIZE << ' ' << 19 << '\n';
-
+	ofs << KEY_IS_LATEX << ' ' << IsLatexOutput << '\n';
 	return true;
 }

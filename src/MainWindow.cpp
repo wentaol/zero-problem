@@ -649,9 +649,13 @@ void MainWindow::OnGenerate(wxCommandEvent& WXUNUSED(event))
 	// 問題生成中にユーザーが同名のファイルを作ると上書きされてしまうことはある
 	// しかし、極めて稀だろうから気にしないことにする
 
+	std::string extension = (mSetting.IsLatexOutput) ? "Latex files (*.tex)|*.tex"
+													 : "HTML files (*.html)|*.html";
+	auto shortext = (mSetting.IsLatexOutput) ? wxT(".tex")
+											 : wxT(".html");
 	wxFileDialog dialog(this, _("Choose an output file"), // wxT("出力ファイルを選択")
-		wxT(""), wxString(timeString.fileName),
-		_("HTML files (*.html)|*.html"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT); // wxT("HTML ファイル (*.html)|*.html")
+		wxT(""), wxString(timeString.fileName + shortext),
+		_(extension), wxFD_SAVE | wxFD_OVERWRITE_PROMPT); // wxT("HTML ファイル (*.html)|*.html")
 	if (dialog.ShowModal() != wxID_OK) {
 		return;
 	}

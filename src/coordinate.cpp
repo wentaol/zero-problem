@@ -1,4 +1,5 @@
 ﻿#include "coordinate.h"
+#include <sstream>
 
 bool Coordinate::isPass() const
 {
@@ -86,6 +87,16 @@ std::string Coordinate::sgfStr() const
 	coord[1] = static_cast<char>((row + 'a') - 1);
 	coord[2] = '\0';
 	return std::string(coord);
+}
+
+std::string Coordinate::texStr(int boardSize) const
+{
+	if (isPass()) return std::string();
+	char colchar = column >= 9 ? 'j' + column - 9 : 'a' + column - 1;
+	std::stringstream o;
+	o << colchar;
+	o << boardSize + 1 - row;
+	return o.str();
 }
 
 std::string Coordinate::str(int boardSize) const

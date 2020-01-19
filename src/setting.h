@@ -37,6 +37,7 @@ struct Setting
 	double searchSpeed;
 	bool logging;
 	int boardSize;
+	bool IsLatexOutput;
 
 	void setDefaultValues();
 	int getNumberOfVisitsInTheFirstStep() const;

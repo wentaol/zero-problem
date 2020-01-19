@@ -3,6 +3,11 @@
 
 #include <sstream>
 #include <iomanip>
+#include <map>
+
+std::string getLatexMoves(const Board& board,
+	const std::vector<Move>& moves,
+	const Color& lastMoveColor);
 
 void Illustration::clear()
 {
@@ -14,6 +19,142 @@ void Illustration::clear()
 		winrate[i] = 0.0;
 		moves[i].clear();
 	}
+}
+
+std::string Illustration::latex(const std::string& id)
+{
+	std::ostringstream o;
+	std::string tmp = metadata;
+	std::replace(tmp.begin(), tmp.end(), '\\', '/');
+
+	const auto& lastMove = board.lastMove;
+	const auto& lastMoveColor = lastMove.color;
+
+	std::vector<std::string> blackstones, whitestones;
+	for (int row = 1; row <= board.size; ++row) {
+		for (int column = 1; column <= board.size; ++column) {
+			if (row == lastMove.coord.row && column == lastMove.coord.column)
+				continue;
+			Color c = board.stones[row - 1][column - 1];
+			Coordinate coord;
+			coord.column = column;
+			coord.row = row;
+			if (c == Color::BLACK) {
+				blackstones.push_back(coord.texStr(board.size));
+			}
+			else if (c == Color::WHITE) {
+				whitestones.push_back(coord.texStr(board.size));
+			}
+		}
+	}
+
+	// Metadata
+	o << "\\begin{verbatim}" << std::endl;
+	o << tmp << "    ";
+	o << std::fixed << std::setprecision(2) << winrate[0] << ", ";
+	o << std::fixed << std::setprecision(2) << winrate[1] << std::endl;
+	o << "\\end{verbatim}" << std::endl;
+	o << "\\begin{multicols}{3}" << std::endl;
+	//
+	// Goban 1
+	//
+	o << "\\begin{center}" << std::endl;
+	o << "\\cleargoban" << std::endl;
+	o << "\\white{";
+	for (auto it = whitestones.begin(); it != whitestones.end(); ++it)
+	{
+		o << *it;
+		if(std::next(it) != whitestones.end())
+			o << ",";
+	}
+	o << "}" << std::endl;
+	o << "\\black{";
+	for (auto it = blackstones.begin(); it != blackstones.end(); ++it)
+	{
+		o << *it;
+		if (std::next(it) != blackstones.end())
+			o << ",";
+	}
+	o << "}" << std::endl;
+	// last move
+	if (lastMoveColor == Color::WHITE)
+		o << "\\white[\\igotriangle]{";
+	else
+		o << "\\black[\\igotriangle]{";
+	o << lastMove.coord.texStr(board.size)<< "}" << std::endl;
+	o << "\\copytogoban{2}" << std::endl;
+	o << "\\copytogoban{3}" << std::endl;
+	o << "\\showfullgoban" << std::endl;
+	o << "\\end{center}" << std::endl;
+	o << "\\columnbreak" << std::endl;
+	
+	//
+	// Goban 2
+	//
+	o << "\\begin{center}" << std::endl;
+	o << "\\usegoban{2}" << std::endl;
+	o << getLatexMoves(board, moves[0], lastMoveColor);
+	o << "\\end{center}" << std::endl;
+	o << "\\columnbreak" << std::endl;
+	
+	//
+	// Goban 3
+	//
+	o << "\\begin{center}" << std::endl;
+	o << "\\usegoban{3}" << std::endl;
+	o << getLatexMoves(board, moves[1], lastMoveColor);
+	o << "\\end{center}" << std::endl;
+	o << "\\end{multicols}" << std::endl;
+	return o.str();
+}
+
+std::string getLatexMoves(const Board& board, const std::vector<Move>& moves, const Color& lastMoveColor)
+{
+	std::ostringstream o;
+	if (lastMoveColor == Color::WHITE)
+		o << "\\black[1]{";
+	else
+		o << "\\white[1]{";
+	std::map<std::string, std::vector<int>> movenums;
+	int idx = 1;
+	for (auto it = moves.begin(); it != moves.end(); ++it)
+	{
+		const auto movestr = (*it).coord.texStr(board.size);
+		movenums[movestr].push_back(idx);
+		o << movestr;
+		if (std::next(it) != moves.end())
+			o << ",";
+		idx++;
+	}
+	o << "}" << std::endl;
+	o << "\\showfullgoban" << std::endl;
+	o << "\\\\";
+	// Print overlapping stones
+	for (auto it = movenums.begin(); it != movenums.end(); ++it)
+	{
+		if (it->second.size() > 1)
+		{			
+			o << "{\\small ";
+			for (auto moveit = it->second.begin(); moveit != it->second.end(); ++moveit)
+			{
+				auto movenum = (*moveit);
+				if ((lastMoveColor == Color::WHITE && movenum % 2 == 1)
+					|| (lastMoveColor == Color::BLACK && movenum % 2 == 0))
+				{
+					o << "\\blackstone[" << movenum << "]";
+				}
+				else
+				{
+					o << "\\whitestone[" << movenum << "]";
+				}
+				if (std::next(moveit) != it->second.end())
+					o << " = ";
+				else
+					o << "}  " << std::endl;
+			}
+		}
+	}
+	return o.str();
 }
 
 std::string Illustration::json(const std::string& id)

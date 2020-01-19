@@ -15,6 +15,7 @@ struct Coordinate
 	const Coordinate& setFromStr(const std::string& word, int boardSize);
 	std::array<Coordinate, 4U> getAdjacent(int boardSize) const;
 	std::string sgfStr() const;
+	std::string texStr(int boardSize) const;
 	std::string str(int boardSize) const;
 
 	bool operator ==(const Coordinate& coord) const;

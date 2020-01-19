@@ -14,4 +14,6 @@ struct Illustration
 
 	void clear();
 	std::string json(const std::string& id);
+	std::string latex(const std::string& id);
+
 };

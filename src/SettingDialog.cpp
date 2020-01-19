@@ -202,6 +202,16 @@ SettingDialog::SettingDialog(const wxString& title, wxFont& font, Setting& setti
 		}
 		vbox->Add(hbox, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 8);
 	}
+	vbox->AddSpacer(20);
+	{
+		auto hbox = new wxBoxSizer(wxHORIZONTAL);
+		{
+			cbLatex = new wxCheckBox(this, wxID_ANY, "Latex output", wxDefaultPosition, wxDefaultSize);
+			cbLatex->SetValue(mSetting.IsLatexOutput);
+			hbox->Add(cbLatex, 3, wxALIGN_CENTER_VERTICAL);
+		}
+		vbox->Add(hbox, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 8);
+	}
 
 	vbox->AddStretchSpacer(1);
 	{
@@ -272,7 +282,7 @@ void SettingDialog::OnCloseDialog(wxCloseEvent& event)
 			mSetting.playerNames.push_back(String(tokens[n]));
 		}
 	}
-
+	mSetting.IsLatexOutput = cbLatex->GetValue();
 	mSetting.save();
 
 	event.Skip();

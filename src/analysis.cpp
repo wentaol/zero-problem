@@ -3,6 +3,7 @@
 #include "illustration.h"
 #include "range.h"
 #include "html.h"
+#include "Latex.h"
 #include "mutex.h"
 #include "log_file.h"
 
@@ -167,11 +168,13 @@ std::vector<double> Analysis::measurePriorities(Player player)
 	return priorities;
 }
 
-std::vector<std::string> Analysis::makeJson(
+std::vector<Illustration> makeIllustrations(
+	Game& game, std::unique_ptr<LeelaZero>& gtp, 
+	std::vector<std::unique_ptr<VariationList>>& vll,
 	const std::string& metadata, const std::string& id, int& number,
 	int maximumNumberOfMoves, const std::vector<int>& problemPositions)
 {
-	std::vector<std::string> json;
+	std::vector<Illustration> illustrations;
 	game.go(0, *gtp);
 
 	// リストproblemPositionsにある局面を問題にする
@@ -249,6 +252,45 @@ std::vector<std::string> Analysis::makeJson(
 			}
 		}
 
+		// 出力されたHTMLを後に統合したり編集する際に問題に名前があった方が
+		// 便利であろうということで、IDの出力をしている
+		illustrations.push_back(il); 
+	}
+	return illustrations;
+}
+
+std::vector<std::string> Analysis::makeLatex(
+	const std::string& metadata, const std::string& id, int& number,
+	int maximumNumberOfMoves, const std::vector<int>& problemPositions)
+{
+	std::vector<std::string> problems;
+	game.go(0, *gtp);
+
+	auto illustrations = makeIllustrations(game, gtp, vll, metadata, id, number,
+		maximumNumberOfMoves, problemPositions);
+
+	// リストproblemPositionsにある局面を問題にする
+	for (auto& il : illustrations) {
+		// 出力されたHTMLを後に統合したり編集する際に問題に名前があった方が
+		// 便利であろうということで、IDの出力をしている
+		problems.push_back(il.latex(id + "_" + std::to_string(number)));
+		++number;
+	}
+	return problems;
+}
+
+std::vector<std::string> Analysis::makeJson(
+	const std::string& metadata, const std::string& id, int& number,
+	int maximumNumberOfMoves, const std::vector<int>& problemPositions)
+{
+	std::vector<std::string> json;
+	game.go(0, *gtp);
+
+	auto illustrations = makeIllustrations(game, gtp, vll, metadata, id, number,
+		maximumNumberOfMoves, problemPositions);
+
+	// リストproblemPositionsにある局面を問題にする
+	for (auto& il : illustrations) {
 		// 出力されたHTMLを後に統合したり編集する際に問題に名前があった方が
 		// 便利であろうということで、IDの出力をしている
 		json.push_back(il.json(id + "_" + std::to_string(number)));
@@ -422,8 +464,17 @@ std::vector<std::string> Analysis::generateProblems(
 	// 間違えてkeyPositionsを渡すとバグが発生するので注意する
 	std::wstring ws(job.name.c_str());
 	std::string metadata = std::string(ws.begin(), ws.end());
-	return makeJson(metadata, id, number, 
-					setting.maximumNumberOfMoves, problemPositions);
+
+	if (setting.IsLatexOutput)
+	{
+		return makeLatex(metadata, id, number,
+			setting.maximumNumberOfMoves, problemPositions);
+	}
+	else
+	{
+		return makeJson(metadata, id, number,
+			setting.maximumNumberOfMoves, problemPositions);
+	}
 }
 
 std::string Analysis::generateHtml(
@@ -479,6 +530,8 @@ std::string Analysis::generateHtml(
 
 	// 終了時刻をログに記録
 	Log.time();
-
-	return GetHtml(title, problems, setting.boardSize);
+	if (setting.IsLatexOutput)
+		return GetLatex(title, problems, setting.boardSize);
+	else
+		return GetHtml(title, problems, setting.boardSize);
 }

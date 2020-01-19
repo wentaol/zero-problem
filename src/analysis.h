@@ -24,9 +24,14 @@ struct Analysis
 	void evaluate(int position);
 	double calculatePriority(Color c1, double v1, Color c2, double v2);
 	std::vector<double> measurePriorities(Player player);
+
 	std::vector<std::string> makeJson(
 		const std::string& metadata, const std::string& id, int& number,
 		int maximumNumberOfMoves, const std::vector<int>& problemPositions);
+	std::vector<std::string> makeLatex(
+		const std::string& metadata, const std::string& id, int& number,
+		int maximumNumberOfMoves, const std::vector<int>& problemPositions);
+
 	std::vector<std::string> generateProblems(
 		const Setting& setting, Job& job, JobList& jobList,
 		SearchSpeed& searchSpeed, std::atomic<bool>& ss,

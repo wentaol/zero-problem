@@ -12,7 +12,7 @@ TimeString GetTimeString()
 	{
 		std::ostringstream o;
 		o.imbue(std::locale(""));
-		const auto s = wxString(_("Go_%Y_%m_%d_%H_%M_%S")) + wxT(".html");// wxT("囲碁_%Y_%m_%d_%H_%M_%S")
+		const auto s = wxString(_("Go_%Y_%m_%d_%H_%M_%S"));// wxT("囲碁_%Y_%m_%d_%H_%M_%S")
 		const std::string fmt = s.ToUTF8().data();
 		o << std::put_time(std::localtime(&now), fmt.c_str());
 		timeString.fileName = ToString(o.str());

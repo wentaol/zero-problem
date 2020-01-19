@@ -31,4 +31,5 @@ private:
 	wxRadioBox* rbPlayer;
 	wxArrayString chPlayer;
 	wxTextCtrl* txPlayerNames;
+	wxCheckBox* cbLatex;
 };
