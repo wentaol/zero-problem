@@ -96,5 +96,13 @@
     <ClCompile Include="..\StringUtil.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Latex.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Latex.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

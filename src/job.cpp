@@ -102,7 +102,17 @@ void Job::setNumberOfProblems(const Setting& setting)
 void Job::setRange(const Setting& setting)
 {
 	start = setting.start;
-	last = std::min(setting.last, static_cast<int>(game.moves.size()));
+	int lastValidMove = game.moves.size() - 1;
+	for (int i = 0; i < game.moves.size(); i++)
+	{
+		if (i > 0 && game.moves[i].color == game.moves[i - 1].color)
+		{
+			lastValidMove = i-1;
+			break;
+		}
+	}
+
+	last = std::min(setting.last, lastValidMove);
 }
 
 int Job::getProgressRate(const Setting& setting) const

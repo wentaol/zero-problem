@@ -169,6 +169,7 @@
     <ClCompile Include="illustration.cpp" />
     <ClCompile Include="job.cpp" />
     <ClCompile Include="job_list.cpp" />
+    <ClCompile Include="Latex.cpp" />
     <ClCompile Include="leela_zero.cpp" />
     <ClCompile Include="log_file.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="illustration.h" />
     <ClInclude Include="job.h" />
     <ClInclude Include="job_list.h" />
+    <ClInclude Include="Latex.h" />
     <ClInclude Include="leela_zero.h" />
     <ClInclude Include="log_file.h" />
     <ClInclude Include="MainWindow.h" />

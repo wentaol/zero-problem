@@ -162,6 +162,7 @@
     <ClCompile Include="..\illustration.cpp" />
     <ClCompile Include="..\job.cpp" />
     <ClCompile Include="..\job_list.cpp" />
+    <ClCompile Include="..\Latex.cpp" />
     <ClCompile Include="..\leela_zero.cpp" />
     <ClCompile Include="..\log_file.cpp" />
     <ClCompile Include="..\move.cpp" />
@@ -179,6 +180,9 @@
     <ClCompile Include="test_main.cpp" />
     <ClCompile Include="test_range.cpp" />
     <ClCompile Include="test_string_util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Latex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

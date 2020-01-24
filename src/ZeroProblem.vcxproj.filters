@@ -96,6 +96,9 @@
     <ClCompile Include="variation_list.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="Latex.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="analysis.h">
@@ -180,6 +183,9 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="variation_list.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Latex.h">
       <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>
