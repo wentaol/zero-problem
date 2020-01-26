@@ -24,8 +24,9 @@ enum class CharacterSet : int
 struct Setting
 {
 	String lz;
-	String networkWeights;
+	String networkWeights;	
 	int numberOfThreads;
+	int numberOfScanningVisits;
 	int numberOfVisits;
 	int numberOfProblems;
 	int start;

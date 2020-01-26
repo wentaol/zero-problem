@@ -79,6 +79,13 @@ SettingDialog::SettingDialog(const wxString& title, wxFont& font, Setting& setti
 			hbox->Add(stNumberOfVisits, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 8);
 			auto hbox2 = new wxBoxSizer(wxHORIZONTAL);
 			{
+				spNumberOfScanningVisits = new wxSpinCtrl(this, wxID_ANY);
+				spNumberOfScanningVisits->SetRange(30, 10000000);
+				spNumberOfScanningVisits->SetValue(mSetting.numberOfScanningVisits);
+				hbox2->Add(spNumberOfScanningVisits, 0, wxALIGN_CENTER_VERTICAL);
+
+				auto stAnalysis = new wxStaticText(this, wxID_ANY, wxT(" Analysis:"));
+				hbox2->Add(stAnalysis, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 8);
 				spNumberOfVisits = new wxSpinCtrl(this, wxID_ANY);
 				spNumberOfVisits->SetRange(30, 10000000);
 				spNumberOfVisits->SetValue(mSetting.numberOfVisits);
@@ -260,6 +267,7 @@ void SettingDialog::OnCloseDialog(wxCloseEvent& event)
 	mSetting.lz = txLZ->GetValue();
 	mSetting.networkWeights = txNetworkWeights->GetValue();
 	mSetting.numberOfThreads = spNumberOfThreads->GetValue();
+	mSetting.numberOfScanningVisits = spNumberOfScanningVisits->GetValue();
 	mSetting.numberOfVisits = spNumberOfVisits->GetValue();
 	mSetting.numberOfProblems = spNumberOfProblems->GetValue();
 	mSetting.start = spStart->GetValue();

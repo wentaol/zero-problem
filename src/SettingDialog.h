@@ -21,6 +21,7 @@ private:
 	wxTextCtrl* txLZ;
 	wxTextCtrl* txNetworkWeights;
 	wxSpinCtrl* spNumberOfThreads;
+	wxSpinCtrl* spNumberOfScanningVisits;
 	wxSpinCtrl* spNumberOfVisits;
 	wxSpinCtrl* spNumberOfProblems;
 	wxSpinCtrl* spStart;

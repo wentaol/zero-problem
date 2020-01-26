@@ -22,7 +22,8 @@ void Setting::setDefaultValues()
 	lz.clear();
 	networkWeights.clear();
 	numberOfThreads = 2;
-	numberOfVisits = 300;
+	numberOfVisits = 20000;
+	numberOfScanningVisits = 300;
 	numberOfProblems = 9;
 	start = 5;
 	last = 244;
@@ -37,7 +38,7 @@ void Setting::setDefaultValues()
 
 int Setting::getNumberOfVisitsInTheFirstStep() const
 {
-	return std::max(numberOfVisits / 10, 1);
+	return std::min(numberOfScanningVisits, numberOfVisits);
 }
 
 int Setting::getVirtualNumberOfVisits1() const
@@ -54,6 +55,7 @@ static const char* const KEY_FORMAT = "Format";
 static const char* const KEY_LZ = "LeelaZero";
 static const char* const KEY_NETWORK_WEIGHTS = "NetworkWeights";
 static const char* const KEY_NUMBER_OF_THREADS = "NumberOfThreads";
+static const char* const KEY_NUMBER_OF_SCANNING_VISITS = "NumberOfScanningVisits";
 static const char* const KEY_NUMBER_OF_VISITS = "NumberOfVisits";
 static const char* const KEY_NUMBER_OF_PROBLEMS = "NumberOfProblems";
 static const char* const KEY_START = "Start";
@@ -100,6 +102,8 @@ bool Setting::load()
 					networkWeights = ToString(value);
 				} else if (key == KEY_NUMBER_OF_THREADS) {
 					numberOfThreads = std::stoi(value);
+				} else if (key == KEY_NUMBER_OF_SCANNING_VISITS) {
+					numberOfScanningVisits = std::stoi(value);
 				} else if (key == KEY_NUMBER_OF_VISITS) {
 					numberOfVisits = std::stoi(value);
 				} else if (key == KEY_NUMBER_OF_PROBLEMS) {
@@ -173,6 +177,7 @@ bool Setting::save() const
 	ofs << KEY_LZ << ' ' << ToUtf8String(lz) << '\n';
 	ofs << KEY_NETWORK_WEIGHTS << ' ' << ToUtf8String(networkWeights) << '\n';
 	ofs << KEY_NUMBER_OF_THREADS << ' ' << numberOfThreads << '\n';
+	ofs << KEY_NUMBER_OF_SCANNING_VISITS << ' ' << numberOfScanningVisits << '\n';
 	ofs << KEY_NUMBER_OF_VISITS << ' ' << numberOfVisits << '\n';
 	ofs << KEY_NUMBER_OF_PROBLEMS << ' ' << numberOfProblems << '\n';
 	ofs << KEY_START << ' ' << start << '\n';
